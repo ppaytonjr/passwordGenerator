@@ -3,7 +3,7 @@
     align-self:center;
     text-align:center;
     width: 800px;
-    height:500px;
+    height:700px;
     margin: 0 auto;
     margin: 0 0 40px;
     background:lightgrey;
@@ -46,7 +46,7 @@ margin-bottom:100px;
 
 }
 textarea{
-    height:100px;
+    height:90px;
     width:500px;
     border-radius:15px;
     border:2px dashed black;
@@ -70,5 +70,9 @@ textarea{
     body {
       background-color: #333;
       position:fixed;
-      .wrapper {
+    }
+      #wrapper {
         width: 700px;
+      }
+    
+}
