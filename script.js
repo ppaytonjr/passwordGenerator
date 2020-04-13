@@ -1,57 +1,89 @@
-var alfabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
-var numb =["0","1","2","3","4","5","6","7","8","9"];
-var symb = ["~","`","!","@","#","$","%","^","&","*","(",")","_","-","+","=","{","[","}","]","|",";","<",">",".","?","/"];
-var whatNumbers = document.getElementById("numb");
-var whatSymbol = document.getElementById("symb");
-var password = document.getElementById("password");
-var gen = document.getElementById("generate");
-var copy = document.getElementById("copy");
-var things = alfabet.concat(numb,symb);
-var finalPswd = things[Math.floor(Math.random()*things.length)];
+//Dom elements
+var displayEl = document.getElementById("display");
+var lengthEl = document.getElementById("length");
+var uppercaseEl = document.getElementById("uppercase");
+var lowercaseEl = document.getElementById("lowercase");
+var numbersEl = document.getElementById("numbers");
+var symbolsEl = document.getElementById("symbols");
+var generateEl = document.getElementById("generate");
+var clipboardEl = document.getElementById("copy");
+//onclick for display element-copy to clipboard
 
-console.log(finalPswd);
-alert("welcome to our random password generator!");
+var randomFunc = {
+    lower: generateRandomLower,
+    upper: generateRandomUpper,
+    numbers: generateRandomNumbers,
+    symbols: generateRandomSymbols
+};
+//Generate Event Listener
+generateEl.addEventListener('click', () => {
+    var length = lengthEl.value;
+    var hasLower = lowercaseEl.checked;
+    var hasUpper = uppercaseEl.checked;
+    var hasNumbers = numbersEl.checked;
+    var hasSymbols = symbolsEl.checked;
 
-var alfLength = confirm("You understand your password must contain letters?"); 
-if ("false"){
-    alert("your password must contain Letters. Your page will be refreshed");
-    location.reload()
-}else {
-var symLength = confirm("You understand your password must contain symbols?");
-if ("false"){
-    alert("Your password must contain Symbols. Your page will be refreshed");
-    location.reload()
-}else {}
-var numLength = confirm("You understand your password must contain numbers?");
-if ("false"){
-    alert("Your password must contain Numbers. Your page will be reloaded");
-    location.reload()
-}else{
-var numLength = prompt("Please select the amount of characters for your password, between 8 and 128 characters");
+    displayEl.value = generatePassword(
+        hasUpper,
+        hasLower, 
+        hasNumbers, 
+        hasSymbols, 
+        length);
+});
 
-var pBox = numLength;
-console.log(pBox);
+clipboardEl.addEventListener('click', () => {
+    var copyText = document.getElementById("display");
 
-if (pBox <8 || pBox > 128) {
-    alert("your character selection must be between 8 and 128. Please refresh the page and try again");
-    location.reload()
-}else {
-function psswd () {
-   let psswd ="";
-    for (var i=0; i<=pBox; i++) {
-        psswd+=finalPswd;
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+  
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
+  
+    /* Alert the copied text */
+    alert("Copied the text: " + copyText.value);
+});
+//Generate Password Function
+function generatePassword(upper, lower, numbers, symbols, length) {
+ //   console.log("clicked");
+    var generatedPassword = "";
+    var typesCount = upper + lower + numbers + symbols;
+    var typesArr = [{upper}, {lower}, {numbers}, {symbols}].filter
+    (item => Object.values(item)[0]);
+
+ 
+    
+    if(typesCount === 0) {
+        return "";
     }
+
+    for(var i = 0; i < length; i += typesCount) { 
+        typesArr.forEach(type => {
+            var funcName = Object.keys(type)[0];
+        
+
+        generatedPassword += randomFunc[funcName]();
+        });
+    }
+    console.log(generatedPassword);
+    return generatedPassword;
+
     
-    return psswd;
 }
-}}}
-console.log(psswd());
 
-function getPass (){
-    
-generate.addEventListener("click", psswd);
-return password;
-} 
-console.log (getPass);
+function generateRandomLower() {
+    return String.fromCharCode(Math.floor(Math.random() * 26) + 97);
+}
 
+function generateRandomUpper() {
+    return String.fromCharCode(Math.floor(Math.random() * 26) + 65);
+}
 
+function generateRandomNumbers() {
+    return String.fromCharCode(Math.floor(Math.random() * 10) + 48);
+}
+
+function generateRandomSymbols() {
+    return String.fromCharCode(Math.floor(Math.random() * 10) + 33);
+}
